@@ -1,0 +1,389 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta
+        name="description"
+        content="SpendWise helps you manage income, track expenses, plan budgets, and understand spending habits."
+    >
+
+    <title>SpendWise | Personal Finance Tracker</title>
+
+    <!-- Main stylesheet -->
+    <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+
+    <!-- Navigation Header -->
+    <header class="topbar">
+        <a href="/" class="brand">
+            <span class="brand-icon">S</span>
+            <span>SpendWise</span>
+        </a>
+
+        <nav class="navigation" aria-label="Main navigation">
+            <a href="#dashboard">Dashboard</a>
+            <a href="#transactions">Transactions</a>
+            <a href="#budgets">Budgets</a>
+        </nav>
+    </header>
+
+    <main class="dashboard" id="dashboard">
+
+        <!-- Welcome Section -->
+        <section class="welcome">
+            <p class="eyebrow">PERSONAL FINANCE</p>
+
+            <h1>Take control of your money.</h1>
+
+            <p>
+                Track your income, manage everyday expenses,
+                and make smarter financial decisions.
+            </p>
+        </section>
+
+        <!-- Financial Summary -->
+        <section class="summary-grid" aria-label="Financial summary">
+
+            <article class="summary-card">
+                <p>Total Income</p>
+                <h2 id="totalIncome">₹0.00</h2>
+                <span>Income received this month</span>
+            </article>
+
+            <article class="summary-card">
+                <p>Total Expenses</p>
+                <h2 id="totalExpenses">₹0.00</h2>
+                <span>Money spent this month</span>
+            </article>
+
+            <article class="summary-card">
+                <p>Available Balance</p>
+                <h2 id="balance">₹0.00</h2>
+                <span>Income minus expenses</span>
+            </article>
+
+            <article class="summary-card">
+                <p>Monthly Budget</p>
+                <h2 id="monthlyBudget">₹0.00</h2>
+                <span>Your planned spending limit</span>
+            </article>
+
+        </section>
+
+        <!-- Spending Analytics -->
+        <section class="charts-grid" id="analytics">
+
+            <article class="panel">
+                <div class="panel-heading">
+                    <div>
+                        <h2>Expenses by Category</h2>
+                        <p>See which categories use most of your money.</p>
+                    </div>
+                </div>
+
+                <div class="chart-container">
+                    <canvas
+                        id="categoryChart"
+                        role="img"
+                        aria-label="Doughnut chart showing expenses by category"
+                    ></canvas>
+                </div>
+
+                <p id="categoryChartMessage" class="empty-message"></p>
+            </article>
+
+            <article class="panel">
+                <div class="panel-heading">
+                    <div>
+                        <h2>Monthly Spending</h2>
+                        <p>Compare your expenses across recent months.</p>
+                    </div>
+                </div>
+
+                <div class="chart-container">
+                    <canvas
+                        id="spendingChart"
+                        role="img"
+                        aria-label="Line chart showing monthly spending"
+                    ></canvas>
+                </div>
+
+                <p id="spendingChartMessage" class="empty-message"></p>
+            </article>
+
+        </section>
+
+        <!-- Budget Management -->
+        <section class="panel budget-panel" id="budgets">
+
+            <div class="section-heading">
+                <div>
+                    <p class="eyebrow">BUDGET PLANNER</p>
+                    <h2>Monthly Budget</h2>
+                </div>
+            </div>
+
+            <form id="budgetForm" class="budget-form">
+                <div class="form-field">
+                    <label for="budgetMonth">Month</label>
+                    <input
+                        type="month"
+                        id="budgetMonth"
+                        name="month"
+                        required
+                    >
+                </div>
+
+                <div class="form-field">
+                    <label for="budgetAmount">Budget amount (₹)</label>
+                    <input
+                        type="number"
+                        id="budgetAmount"
+                        name="amount"
+                        min="0.01"
+                        step="0.01"
+                        placeholder="e.g. 25000"
+                        required
+                    >
+                </div>
+
+                <button type="submit" class="primary-button">
+                    Set Budget
+                </button>
+            </form>
+
+            <div class="budget-details">
+                <p id="budgetMessage" aria-live="polite">
+                    Set a monthly budget to get started.
+                </p>
+
+                <div
+                    class="budget-track"
+                    role="progressbar"
+                    aria-label="Monthly budget used"
+                    aria-valuemin="0"
+                    aria-valuemax="100"
+                    aria-valuenow="0"
+                    id="budgetProgressTrack"
+                >
+                    <div
+                        class="budget-fill"
+                        id="budgetProgress"
+                    ></div>
+                </div>
+            </div>
+
+        </section>
+
+        <!-- Add Transaction -->
+        <section class="panel add-transaction-panel" id="add-transaction">
+
+            <div class="section-heading">
+                <div>
+                    <p class="eyebrow">QUICK ENTRY</p>
+                    <h2>Add a Transaction</h2>
+                    <p>Record income or expenses in a few simple steps.</p>
+                </div>
+            </div>
+
+            <form id="transactionForm">
+
+                <div class="form-grid">
+
+                    <div class="form-field">
+                        <label for="transactionType">Transaction type</label>
+                        <select
+                            id="transactionType"
+                            name="type"
+                            required
+                        >
+                            <option value="expense">Expense</option>
+                            <option value="income">Income</option>
+                        </select>
+                    </div>
+
+                    <div class="form-field description-field">
+                        <label for="transactionDescription">Description</label>
+                        <input
+                            type="text"
+                            id="transactionDescription"
+                            name="description"
+                            maxlength="100"
+                            placeholder="e.g. Monthly salary"
+                            required
+                        >
+                    </div>
+
+                    <div class="form-field">
+                        <label for="transactionCategory">Category</label>
+                        <select
+                            id="transactionCategory"
+                            name="category"
+                            required
+                        >
+                            <option value="Food">Food and Groceries</option>
+                            <option value="Transport">Transportation</option>
+                            <option value="Housing">Housing and Rent</option>
+                            <option value="Bills">Bills and Utilities</option>
+                            <option value="Health">Healthcare</option>
+                            <option value="Education">Education</option>
+                            <option value="Shopping">Shopping</option>
+                            <option value="Entertainment">Entertainment</option>
+                            <option value="Salary">Salary</option>
+                            <option value="Freelance">Freelance Income</option>
+                            <option value="Other">Other</option>
+                        </select>
+                    </div>
+
+                    <div class="form-field">
+                        <label for="transactionAmount">Amount (₹)</label>
+                        <input
+                            type="number"
+                            id="transactionAmount"
+                            name="amount"
+                            min="0.01"
+                            step="0.01"
+                            placeholder="e.g. 500"
+                            required
+                        >
+                    </div>
+
+                    <div class="form-field">
+                        <label for="transactionDate">Date</label>
+                        <input
+                            type="date"
+                            id="transactionDate"
+                            name="date"
+                            required
+                        >
+                    </div>
+
+                </div>
+
+                <div class="form-actions">
+                    <p id="formMessage" class="form-message"
+                       role="status" aria-live="polite"></p>
+
+                    <button type="submit" class="primary-button">
+                        + Add Transaction
+                    </button>
+                </div>
+
+            </form>
+        </section>
+
+        <!-- Transaction History -->
+        <section class="panel transactions-panel" id="transactions">
+
+            <div class="section-heading">
+                <div>
+                    <p class="eyebrow">YOUR RECORDS</p>
+                    <h2>Transactions</h2>
+                    <p>Review and manage your financial activity.</p>
+                </div>
+            </div>
+
+            <!-- Search and filters -->
+            <form id="filterForm" class="filter-grid">
+
+                <div class="form-field">
+                    <label for="searchTransaction">Search</label>
+                    <input
+                        type="search"
+                        id="searchTransaction"
+                        placeholder="Search description..."
+                    >
+                </div>
+
+                <div class="form-field">
+                    <label for="filterType">Transaction type</label>
+                    <select id="filterType">
+                        <option value="">All types</option>
+                        <option value="income">Income</option>
+                        <option value="expense">Expense</option>
+                    </select>
+                </div>
+
+                <div class="form-field">
+                    <label for="filterCategory">Category</label>
+                    <select id="filterCategory">
+                        <option value="">All categories</option>
+                        <option value="Food">Food and Groceries</option>
+                        <option value="Transport">Transportation</option>
+                        <option value="Housing">Housing and Rent</option>
+                        <option value="Bills">Bills and Utilities</option>
+                        <option value="Health">Healthcare</option>
+                        <option value="Education">Education</option>
+                        <option value="Shopping">Shopping</option>
+                        <option value="Entertainment">Entertainment</option>
+                        <option value="Salary">Salary</option>
+                        <option value="Freelance">Freelance Income</option>
+                        <option value="Other">Other</option>
+                    </select>
+                </div>
+
+                <button type="reset" class="secondary-button">
+                    Clear Filters
+                </button>
+
+            </form>
+
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th scope="col">Description</th>
+                            <th scope="col">Category</th>
+                            <th scope="col">Date</th>
+                            <th scope="col">Type</th>
+                            <th scope="col">Amount</th>
+                            <th scope="col">Actions</th>
+                        </tr>
+                    </thead>
+
+                    <tbody id="transactionRows">
+                        <!-- Rows will be loaded from the backend. -->
+                    </tbody>
+                </table>
+            </div>
+
+            <p id="transactionMessage" class="empty-message"
+               aria-live="polite">
+                Your transactions will appear here.
+            </p>
+
+        </section>
+
+        <!-- Notifications -->
+        <section
+            class="panel alerts-panel"
+            id="alerts"
+            aria-labelledby="alertsTitle"
+        >
+            <h2 id="alertsTitle">Budget Alerts</h2>
+
+            <div id="alertsContainer" aria-live="polite">
+                <p>No alerts to display yet.</p>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <p>SpendWise · Personal finance made simpler.</p>
+        </footer>
+
+    </main>
+
+    <!-- Chart.js library -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <!-- Application JavaScript -->
+    <script src="js/app.js"></script>
+
+</body>
+</html>
