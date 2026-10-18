@@ -39,9 +39,9 @@ async function startServer() {
     try {
         await db.query("SELECT 1");
 
-        app.listen(PORT, () => {
-            console.log(`SpendWise is running at http://localhost:${PORT}`);
-        });
+        app.listen(PORT, "0.0.0.0", () => {
+    console.log(`SpendWise is running on port ${PORT}`);
+});
     } catch (error) {
         console.error("Could not connect to the database:", error.message);
         process.exitCode = 1;
